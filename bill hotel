@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Billing System</title>
 
+    
+</head>
+<body>
+
+    <div class="container">
+        <h2>🏨 Hotel Billing System</h2>
+
+        <label>Room Type:
+            <select id="roomType">
+                <option value="single">Single (Rs. 2000/night)</option>
+                <option value="double">Double (Rs. 4000/night)</option>
+                <option value="suite">Suite (Rs. 10000/night)</option>
+            </select>
+        </label><br>
+
+        <label>Number of Nights:
+            <input id="nights" type="number" min="1">
+        </label><br>
+
+        <label><input type="checkbox" id="breakfast"> Breakfast (Rs. 200/day)</label>
+        <label><input type="checkbox" id="airport"> Airport Pickup (Rs. 2899 one-time)</label>
+        <label><input type="checkbox" id="laundry"> Laundry (Rs. 200/day)</label><br>
+
+        <button id="calculate">Calculate Bill</button>
+
+        <h3>Invoice</h3>
+        <pre id="invoice"></pre>
+    </div>
+
+    <script>
+        const roomType = document.getElementById('roomType');
+        const nights = document.getElementById('nights');
+        const breakfast = document.getElementById('breakfast');
+        const airport = document.getElementById('airport');
+        const laundry = document.getElementById('laundry');
+        const calculate = document.getElementById('calculate');
+        const invoice = document.getElementById('invoice');
+
+        const roomPrices = {
+            single: 2000,
+            double: 4000,
+            suite: 10000
+        };
+
+        calculate.addEventListener('click', function () {
+            const n = Number(nights.value);
+
+            if (Number.isNaN(n) || n < 1) {
+                invoice.textContent = "Enter a valid number of nights (>= 1)";
+                return;
+            }
+
+            const selectedRoom = roomType.value;
+            const roomRate = roomPrices[selectedRoom];
+            const roomCost = roomRate * n;
+
+            const breakfastCost = breakfast.checked ? 200 * n : 0;
+            const laundryCost = laundry.checked ? 200 * n : 0;
+            const airportCost = airport.checked ? 2899 : 0;
+
+            const total = roomCost + breakfastCost + laundryCost + airportCost;
+
+            invoice.textContent =
+                `Room Type: ${selectedRoom.toUpperCase()}
+Nights: ${n}
+--------------------------------
+Room Cost: Rs. ${roomCost}
+Breakfast Cost: Rs. ${breakfastCost}
+Laundry Cost: Rs. ${laundryCost}
+Airport Pickup: Rs. ${airportCost}
+--------------------------------
+TOTAL BILL: Rs. ${total}`;
+        });
+    </script>
+
+</body>
+</html>
